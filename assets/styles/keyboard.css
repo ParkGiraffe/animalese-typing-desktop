@@ -11,19 +11,19 @@
     width: 416px;
     margin: 8px;
     padding: 8px;
-    background-color: bisque;
+    background-color: var(--secondary-bg-color);
     user-select: none;
     border-radius: 6px;
-    filter: drop-shadow(0 6px 0px #d1b48b);
+    filter: drop-shadow(0 6px 0px var(--accent-color));
 }
 
 .highlighted, .highlighted .key-label, .highlighted .button-top, .highlighted[btn-type=b] .button-top {
     fill: var(--input-highlight-color-2);
     --alt1-color: var(--input-highlight-color-2);
-    color: white;
+    color: var(--input-highlight-text-color);
 }
 .highlighted .key-icon {
-     fill: white;
+     fill: var(--input-highlight-text-color);
 }
 
 /*#region KEYBOARD */
@@ -45,7 +45,7 @@ key-board {
     top: 46%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: #d9bd96;
+    color: var(--accent-color);
     transition: transform 0.33s ease, font-size 0.2s ease;
 }
 
@@ -65,8 +65,8 @@ piano-key[btn-type=b] .key-label
     top: 46%;
     left: 50%;
     transform: translate(-50%, -50%);
-    fill:#d9bd96;
-    stroke: #d9bd96;
+    fill:var(--accent-color);
+    stroke: var(--accent-color);
     transition: transform 0.33s ease;
 }
 .key-row {
@@ -82,7 +82,7 @@ key-button, .key_s, .key_m, .key_l, .key_blank {
 .key_l {min-width: calc(3* var(--key-size) * 2);}
 
 key-button .button-top {
-    fill:#ece0d0;
+    fill: var(--secondary-bg-color);
     transform: translate(0px,0px);
     transition: all 0.33s ease;
 }
@@ -93,13 +93,13 @@ key-button.pressed .button-top {
     transition: transform 0.07s ease;
 }
 key-button.pressed .key-label {
-    color: #ffffff;
+    color: var(--input-highlight-text-color);
     transform: translate(-50%, calc(-50% + 12.5%));
     transition: transform 0.07s ease;
 }
 
 key-button.pressed .key-icon {
-    fill: #ffffff;
+    fill: var(--input-highlight-text-color);
     transform: translate(-50%, calc(-50% + 8%));
     transition: transform 0.07s ease;
 }
@@ -113,9 +113,9 @@ piano-board {
     display: inherit;
 }
 #piano_back {
-    background-color: bisque;
+    background-color: var(--secondary-bg-color);
     border-radius: 8px;
-    filter: drop-shadow(0 16px 0px #d1b48b);
+    filter: drop-shadow(0 16px 0px var(--accent-color));
     width: 100%;
     padding: 8px;
     margin: 0px -8px;

@@ -12,13 +12,29 @@ author: joshxviii
     --main-bg-color: #fffae4;
     --main-text-color: #6e5c44;
     --secondary-bg-color: #f8f2d7;
+    --accent-color: #e0c49e;
     --input-bg-color: #ece4c1;
-    --input-main-color: #e0c49e;
     --input-accent-color: #d1b48b;
+    --input-alt-color: #f4edcf;
     --input-highlight-color: #7ee988;
     --input-highlight-color-2: #00ccff;
     --input-highlight-color-3: #ff4343;
+    --input-highlight-text-color: #ffffff;
 }
+
+/* :root {
+    --main-bg-color: #ffffff;
+    --main-text-color: #da8ca9;
+    --secondary-bg-color: #fdf2f8;
+    --accent-color: #f8c6dc;
+    --input-bg-color: #fdf2f8;
+    --input-accent-color: #f4a8cc;
+    --input-alt-color: #fff5fa;
+    --input-highlight-color: #7ee988;
+    --input-highlight-color-2: #00ccff;
+    --input-highlight-color-3: #ff4343;
+    --input-highlight-text-color: #ffffff;
+} */
 
 @font-face {
     font-family: "Arial Rounded Bold";
@@ -69,7 +85,7 @@ div[show=false], div[show=false] text {
     max-width: 100%;
     -webkit-app-region: drag;
     z-index: 5;
-    background-color: var(--input-main-color);
+    background-color: var(--accent-color);
     position: absolute;
     display: flex;
     align-items: center;
@@ -84,7 +100,7 @@ div[show=false], div[show=false] text {
     z-index: 5;
     background: transparent;
     -webkit-app-region: no-drag;
-    background-color: var(--input-main-color);
+    background-color: var(--accent-color);
 }
 #title {
     color: #f0feff;
@@ -109,13 +125,13 @@ div[show=false], div[show=false] text {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: rgb(from var(--input-main-color) r g b / 1);
+    background: rgb(from var(--accent-color) r g b / 1);
     border-radius: 8px;
 }
 
 ::selection {
-    color: #ffffff;
-    background-color: #4e73ff;
+    color: var(--input-highlight-text-color);
+    background-color: var(--input-highlight-color-2);
     border-radius: 8px;
 }
 
@@ -131,7 +147,7 @@ div[show=false], div[show=false] text {
 
 .footer a, .footer p {
     font-size: 12px;
-    color: #b89c7a9f;
+    color: rgb(from var(--main-text-color) r g b / 0.2);
 }
 
 #reset_settings {
@@ -193,7 +209,7 @@ input[type=button], button {
 }
 
 input[type=button]:not(:disabled):hover, button:not(:disabled):hover {
-    background-color: var(--input-main-color);
+    background-color: var(--accent-color);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); 
     transform: scale(1.05);
 }
@@ -206,7 +222,7 @@ input[type=button]:active, button:active {
 
 input[type=button]:disabled, button:disabled  {
     background-color: var(--secondary-bg-color);
-    color: #a89c85; 
+    color: var(--input-accent-color); 
     cursor: not-allowed;
     box-shadow: none; 
     outline: none;
@@ -259,8 +275,8 @@ input[type=checkbox]:checked::after {
 
 
 input[type=checkbox]:hover,input[type=radio]:hover {
-    background-color: var(--input-main-color);
-    border-color: #b89c7a;
+    background-color: var(--accent-color);
+    border-color: var(--input-accent-color);
 }
 
 input[type=radio] {
@@ -302,7 +318,7 @@ input[type=radio]:checked::before {
 #remap_type_select label {
     font-size: 20px;
     color: transparent;
-    text-shadow: 0px 0px 0px #d9bd96;
+    text-shadow: 0px 0px 0px var(--accent-color);
 }
 
 .toggle {
@@ -341,7 +357,7 @@ input:checked + .slider:before {
 }
 
 svg-button {
-    --alt1-color: var(--input-main-color);
+    --alt1-color: var(--accent-color);
     cursor: pointer;
     display: flex;
     flex-direction: column;
@@ -359,7 +375,7 @@ svg-button:active  {
 }
 
 .title-bar svg-button {
-    --alt1-color: #ffffff;
+    --alt1-color: var(--input-highlight-text-color);
     transform-origin: center;
     width: 24px;
     height: 24px;
@@ -399,13 +415,13 @@ svg-button:active  {
 }
 .button_row svg-button {
     width: 100%;
-    background-color: #f4edcf;
+    background-color: var(--input-alt-color);
     border-radius: 32px;
     margin: 0px 8px;
-    box-shadow: 0px 0px 0px #d9bd96;
+    box-shadow: 0px 0px 0px var(--accent-color);
 }
 .button_row svg-button[disabled=false]:not(:active) {
-    box-shadow: 0px 4px 0px #d9bd96;
+    box-shadow: 0px 4px 0px var(--accent-color);
     translate: 0px -4px;
 }
 .button_row svg-button:hover  {
@@ -475,7 +491,7 @@ input[type=range]::-webkit-slider-thumb {
     height: 18px;
     width: 18px;
     border-radius: 8px;
-    background: var(--input-main-color);
+    background: var(--accent-color);
     cursor: pointer;
     -webkit-appearance: none;
     margin-top: 0px;
@@ -530,7 +546,7 @@ input[type=text] {
 }
 
 input[type=text]::placeholder {
-    color: #bcaf98;
+    color: rgb(from var(--main-text-color) r g b / 0.3);
 }
 
 /*#endregion TEXTFIELDS */
@@ -584,7 +600,7 @@ input[type=text]::placeholder {
     border-radius: 2px;
     border-left: 6px solid transparent;
     border-right: 6px solid transparent;
-    border-top: 5px solid var(--input-main-color);
+    border-top: 5px solid var(--accent-color);
     transform: translate(7px, -50%);
 }
 
@@ -617,12 +633,12 @@ input[type=text]::placeholder {
 
 #voice_profile_slots option:hover {
     background-color: var(--input-accent-color);
-    color: #ffffff;
+    color: var(--input-highlight-text-color);
 }
 
 #voice_profile_slots option:checked {
     background-color: var(--input-accent-color);
-    color: #ffffff;
+    color: var(--input-highlight-text-color);
 }
 
 #voice_profile_buttons {
@@ -679,7 +695,7 @@ input[type=text]::placeholder {
     background-color: var(--secondary-bg-color);
     border-radius: 16px 16px 0px 0px;
     box-sizing: border-box;
-    color: #95846d7d;
+    color: var(--accent-color);
     font-size: 14px;
     text-align: center;
     flex-direction: column;
@@ -692,10 +708,10 @@ input[type=text]::placeholder {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    color: #95846da9;
+    color:var(--accent-color);
     min-width: 16px;
     min-height: 16px;
-    background-color: #ece1c167;
+    background-color: var(--input-bg-color);
     border-radius: 8px;
     padding: 8px;
     display: inline-flex;
@@ -721,7 +737,7 @@ input[type=text]::placeholder {
     margin: 0;
     border: 0;
     position: absolute;
-    background-color: #00aaff;
+    background-color: rgb(from var(--input-highlight-color-2) r g b / 0.6);
     caret-color: transparent;
     color: transparent;
 }
@@ -736,7 +752,7 @@ input[type=text]::placeholder {
 
 .remap_tab[pressed=true] {
     background-color: var(--secondary-bg-color);
-    filter: drop-shadow(0 6px 0px var(--input-main-color));
+    filter: drop-shadow(0 6px 0px var(--accent-color));
     translate: 0px 0px;
 }
 
@@ -745,7 +761,7 @@ input[type=text]::placeholder {
     border-radius: 0px 0px 8px 8px;
     translate: 0px 6px;
     background-color: var(--input-bg-color);
-    filter: drop-shadow(0 -6px 0px var(--input-main-color));
+    filter: drop-shadow(0 -6px 0px var(--accent-color));
     width: 100%;
 }
 .remap_tab:hover {
@@ -873,7 +889,7 @@ table thead {
 
 
 #remap-table tbody tr:nth-child(even) {
-    background: rgb(from var(--input-main-color) r g b / 1.0);
+    background: rgb(from var(--accent-color) r g b / 1.0);
 }
 #remap-table tbody tr:nth-child(odd) {
     background: rgb(from var(--input-bg-color) r g b / 1.0);

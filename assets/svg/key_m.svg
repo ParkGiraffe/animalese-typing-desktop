@@ -67,7 +67,7 @@ author: joshxvii
      inkscape:groupmode="layer"
      id="layer1">
     <rect
-       style="fill:#d9bd96;fill-opacity:1;stroke:none;stroke-width:0.47625;stroke-linecap:round;stroke-linejoin:round"
+       style="fill:var(--accent-color);fill-opacity:1;stroke:none;stroke-width:0.47625;stroke-linecap:round;stroke-linejoin:round"
        id="rect4"
        width="96"
        height="40"
