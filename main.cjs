@@ -88,6 +88,7 @@ ipcMain.handle('store-set', async (e, key, value) => {
 });
 const nonResettable = [
     'lang',
+    'theme',
     'startup_run',
 ];
 ipcMain.handle('store-reset', async (e, key) => {// reset a certain key or all settigns
