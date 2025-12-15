@@ -91,7 +91,7 @@
           "to": "animalese-listener"
         }
       ],
-      "artifactName": "AnimaleseTypingSetup.${ext}"
+      "artifactName": "AnimaleseTypingSetup-${arch}.${ext}"
     },
     "afterSign": "build/after-sign-hook.js"
   },
