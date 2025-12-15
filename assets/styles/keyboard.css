@@ -15,7 +15,7 @@
     background-color: var(--secondary-bg-color);
     user-select: none;
     border-radius: 6px;
-    filter: drop-shadow(0 6px 0px var(--accent-color));
+    filter: drop-shadow(0 6px 0px var(--drop-shadow-color));
 }
 
 .highlighted, .highlighted .key-label, .highlighted .button-top, .highlighted[btn-type=b] .button-top {
@@ -116,7 +116,7 @@ piano-board {
 #piano_back {
     background-color: var(--secondary-bg-color);
     border-radius: 8px;
-    filter: drop-shadow(0 16px 0px var(--accent-color));
+    filter: drop-shadow(0 16px 0px var(--drop-shadow-color));
     width: 100%;
     padding: 8px;
     margin: 0px -8px;

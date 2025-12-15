@@ -55,7 +55,7 @@ div[show=false], div[show=false] text {
     max-width: 100%;
     -webkit-app-region: drag;
     z-index: 5;
-    background-color: var(--accent-color);
+    background-color: var(--drop-shadow-color);
     position: absolute;
     display: flex;
     align-items: center;
@@ -101,7 +101,7 @@ div[show=false], div[show=false] text {
 
 ::selection {
     color: var(--input-highlight-text-color);
-    background-color: var(--input-highlight-color-2);
+    background-color: var(--input-highlight-color);
     border-radius: 8px;
 }
 
@@ -345,7 +345,7 @@ svg-button:active  {
 }
 
 .title-bar svg-button {
-    --alt1-color: var(--input-highlight-text-color);
+    --alt1-color: #ffffff;
     transform-origin: center;
     width: 24px;
     height: 24px;
@@ -385,13 +385,13 @@ svg-button:active  {
 }
 .button_row svg-button {
     width: 100%;
-    background-color: var(--input-alt-color);
+    background-color: var(--secondary-bg-color);
     border-radius: 32px;
     margin: 0px 8px;
-    box-shadow: 0px 0px 0px var(--accent-color);
+    box-shadow: 0px 0px 0px var(--drop-shadow-color);
 }
 .button_row svg-button[disabled=false]:not(:active) {
-    box-shadow: 0px 4px 0px var(--accent-color);
+    box-shadow: 0px 4px 0px var(--drop-shadow-color);
     translate: 0px -4px;
 }
 .button_row svg-button:hover  {
@@ -722,7 +722,7 @@ input[type=text]::placeholder {
 
 .remap_tab[pressed=true] {
     background-color: var(--secondary-bg-color);
-    filter: drop-shadow(0 6px 0px var(--accent-color));
+    filter: drop-shadow(0 6px 0px var(--drop-shadow-color));
     translate: 0px 0px;
 }
 
@@ -731,7 +731,7 @@ input[type=text]::placeholder {
     border-radius: 0px 0px 8px 8px;
     translate: 0px 6px;
     background-color: var(--input-bg-color);
-    filter: drop-shadow(0 -6px 0px var(--accent-color));
+    filter: drop-shadow(0 -6px 0px var(--drop-shadow-color));
     width: 100%;
 }
 .remap_tab:hover {
