@@ -35,13 +35,13 @@
 ![DemoImage](https://github.com/user-attachments/assets/ccea8ea8-359c-4a2d-84d2-f9b3ebf97d29)
 
 ## Planned Features:
-- **Get the app code signed/notarized** - This makes sure the app is recognized as trustworthy for smoother installation
+- **Get the app signed/notarized** - This makes sure the app is recognized as trustworthy for smoother installation
 - **Uploading Custom Audio Files**
 - **Audio File Editor** - Cut and edit attack/sustain/decay for uploaded audio files
 - **Note Sound Overhaul** - Changes on how instrument/singing audio is processed
 - **More Sounds** - More sound effects and instrument sounds for the piano tab
 
-> If you want to stay updated on new versions/updates or have some suggestions/feedback, consider joining the [Discord](https://discord.gg/XSXU7AaQjx)!
+> If you want to stay updated on new releases or have any suggestions/feedback, consider joining the [Discord](https://discord.gg/XSXU7AaQjx)!
 
 <br/>
 
@@ -58,7 +58,7 @@ npm install
 ### Building:
 
 This app uses a child process `animalese-listener` to recieve global key inputs.
-This binary has to be built before packing the rest of the app or running in developer mode.
+These binaries have to be built before packing the rest of the app or running in developer mode.
 
 | ||
 |-|-|
@@ -77,7 +77,7 @@ Alternatively you can just run `build:[your-os]` to build the listener and the a
 |macOS:   |`npm run build:mac`  |
 |Linux:   |`npm run build:linux`|
 
-The final binary can found in the [/exports](./exports) folder.
+The final .exe/.dmg/.deb can found in the [/exports](./exports) folder.
 
 ### Run in dev mode:
 ```sh

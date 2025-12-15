@@ -299,7 +299,7 @@ function openSettings() {
 }
 
 function resetSettings() {
-    window.settings.reset();
+    preferences.reset();
     setTimeout( () => {
         initControls();
     }, 10)
@@ -338,24 +338,36 @@ function remapReset() {
 
 window.api.onRemapSound((remapSound) => {
     if (!(remapIn === document.activeElement || isRemapping)) return;
-    const { keycode, isCtrlDown, isAltDown, isShiftDown, finalSound, defaultSound } = currentKey;
+    const { key, keycode, isCtrlDown, isAltDown, isShiftDown, finalSound, defaultSound } = currentKey;
     const reset = remapSound === defaultSound;// if the key is being mapped to it's default sound, reset and clear the mapping in settings
+
+    const keyAsHotkey = (isCtrlDown?'CommandOrControl+':'') + (isAltDown?'Alt+':'') + (isShiftDown?'Shift+':'') + key;
+    const currentHotkey = preferences.get('disable_hotkey');
+    const isHotkey = currentHotkey === keyAsHotkey;
 
     document.querySelector('.highlighted')?.classList.remove('highlighted');
     document.querySelector(`[sound="${remapSound===''?'#no_sound':remapSound}"]`)?.classList.add('highlighted');
 
+    changeTab(!remapSound||remapSound.startsWith('#')?0:remapSound.startsWith('&')?1:remapSound.startsWith('%')?2:remapSound.startsWith('sfx')?3:0);
+    
+    if (remapSound === '#disable_toggle') {
+        preferences.set('disable_hotkey', keyAsHotkey);
+        return;// Do not save hotkey in remapped_keys. Instead, save it as disable_hotkey.
+    }
+    
     const remappedKeys = new Map(Object.entries(preferences.get('remapped_keys')));
     const mapping = { ...remappedKeys.get(`${keycode}`) || {} };
 
-    if (reset) delete mapping[isCtrlDown?'ctrlSound':isAltDown?'altSound':isShiftDown?'shiftSound':'sound'];
+    if (reset) {
+        delete mapping[isCtrlDown?'ctrlSound':isAltDown?'altSound':isShiftDown?'shiftSound':'sound'];
+        if (isHotkey) preferences.reset('disable_hotkey');
+    }
     else mapping[isCtrlDown?'ctrlSound':isAltDown?'altSound':isShiftDown?'shiftSound':'sound'] = remapSound;
 
     if (Object.keys(mapping).length === 0) remappedKeys.delete(`${keycode}`);
     else remappedKeys.set(`${keycode}`, mapping);
 
     preferences.set('remapped_keys', Object.fromEntries(remappedKeys));
-
-    changeTab(!remapSound||remapSound.startsWith('#')?0:remapSound.startsWith('&')?1:remapSound.startsWith('%')?2:remapSound.startsWith('sfx')?3:0);
 });
 
 remapIn.addEventListener('focusin', e => remapMonitor.setAttribute('monitoring', true));
@@ -367,9 +379,14 @@ function remapStart() {
     const { key, isShiftDown, isCtrlDown, isAltDown, finalSound } = currentKey;
     
     document.querySelector('.highlighted')?.classList.remove('highlighted');
-    changeTab(!finalSound||finalSound.startsWith('#')?0:finalSound.startsWith('&')?1:finalSound.startsWith('%')?2:finalSound.startsWith('sfx')?3:0);
+    
+    const keyAsHotkey = (isCtrlDown?'CommandOrControl+':'') + (isAltDown?'Alt+':'') + (isShiftDown?'Shift+':'') + key;
+    const currentHotkey = preferences.get('disable_hotkey');
+    const isHotkey = currentHotkey === keyAsHotkey;
 
-    const highlightedBtn = document.querySelector(`[sound="${finalSound===''?'#no_sound':finalSound}"]`);
+    changeTab(!finalSound||finalSound.startsWith('#')||isHotkey?0:finalSound.startsWith('&')?1:finalSound.startsWith('%')?2:finalSound.startsWith('sfx')?3:0);
+
+    const highlightedBtn = document.querySelector(`[sound="${isHotkey?'#disable_toggle':finalSound===''?'#no_sound':finalSound}"]`);
     highlightedBtn?.classList.add('highlighted');
     highlightedBtn?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     
@@ -419,8 +436,8 @@ function changeTab(newTabIndex = 1) {
 const specialLayout = [
     [
         {label:'Nothing', btnType:'l', sound:`#no_sound`},
-        // {label:'Toggle Active', btnType:'l', sound:`#toggle_active`},
-        // {label:'Show Editor ', btnType:'l', sound:`#2`},
+        {label:'Disable App', btnType:'l', sound:`#disable_toggle`},
+        {label:'Show Editor ', btnType:'l', sound:`#show_window`},
         // {label:'N/A', btnType:'l', sound:`#3`}
     ],
 ]

@@ -19,7 +19,6 @@ if (process.platform !== 'linux') {
 
 // const __filename = fileURLToPath(import.meta.url);
 // const __dirname = path.dirname(__filename);
-const MUTE_HOTKEY = 'CommandOrControl+Shift+D'; // TODO make hotkey configurable from apps remapper
 const SYSTRAY_ICON = (process.platform === 'darwin') ? path.join(__dirname, '/assets/images/icon_18x18.png') : path.join(__dirname, '/assets/images/icon.png');
 const SYSTRAY_ICON_OFF = (process.platform === 'darwin') ? path.join(__dirname, '/assets/images/icon_off_18x18.png') : path.join(__dirname, '/assets/images/icon_off.png');
 const SYSTRAY_ICON_MUTE = (process.platform === 'darwin') ? path.join(__dirname, '/assets/images/icon_mute_18x18.png') : path.join(__dirname, '/assets/images/icon_mute.png');
@@ -34,11 +33,10 @@ function showIfAble() { // focus the existing window if it exists
 }
 
 function setDisable(value = true) {
-    muteValue = preferences.get('mute_app')
-    value = muteValue ? true : preferences.get('always_active') ? false : value;
+    value = muted ? true : preferences.get('always_active') ? false : value;
     if (tray) {
-        tray.setImage(muteValue?SYSTRAY_ICON_MUTE:value?SYSTRAY_ICON_OFF:SYSTRAY_ICON);
-        tray.setToolTip(muteValue?'Animalese Typing: Disabled':'Animalese Typing');
+        tray.setImage(muted?SYSTRAY_ICON_MUTE:value?SYSTRAY_ICON_OFF:SYSTRAY_ICON);
+        tray.setToolTip(muted?'Animalese Typing: Disabled':'Animalese Typing');
     }
     if (disabled === value) return;
     disabled = value;
@@ -55,7 +53,7 @@ const defaults = {
     volume: 0.5,
     audio_mode: 0,
     theme: 'default',
-    mute_app: false,
+    disable_hotkey: 'Shift+F5',
     startup_run: false,
     hold_repeat: true,
     always_active: true,
@@ -86,20 +84,33 @@ ipcMain.handle('store-set', async (e, key, value) => {
     preferences.set(key, value);
     bgwin.webContents.send(`updated-${key}`, value);
     if (key==='startup_run') updateTrayMenu();
+    else if (key==='disable_hotkey') updateDisableHotkey(value);
 });
 const nonResettable = [
     'lang',
     'startup_run',
 ];
-ipcMain.handle('store-reset', async (e) => {// reset and clear any non-settings values fron config.json
-    Object.keys(preferences.store).forEach(key => { if (!nonResettable.includes(key)) preferences.delete(key); });
-    
-    Object.keys(defaults).forEach(key => {
-        if (!nonResettable.includes(key)) {
-            preferences.set(key, defaults[key]);
-            bgwin.webContents.send(`updated-${key}`, defaults[key]);
-        }
-    });
+ipcMain.handle('store-reset', async (e, key) => {// reset a certain key or all settigns
+    if (key) {
+        preferences.delete(key);
+        preferences.set(key, defaults[key]);
+        bgwin.webContents.send(`updated-${key}`, defaults[key]);
+        if (key==='disable_hotkey') updateDisableHotkey(defaults[key]);
+    }
+    else {// reset all
+        Object.keys(preferences.store).forEach(key => { if (!nonResettable.includes(key)) preferences.delete(key); });
+        
+        Object.keys(defaults).forEach(key => {
+            if (!nonResettable.includes(key)) {
+                preferences.set(key, defaults[key]);
+                bgwin.webContents.send(`updated-${key}`, defaults[key]);
+                if (key==='disable_hotkey') updateDisableHotkey(defaults[key]);
+            }
+        });
+    }
+});
+ipcMain.on('show-window', (e) => {
+    showIfAble();
 });
 ipcMain.on('close-window', (e) => {
     if (bgwin) bgwin.close();
@@ -123,7 +134,8 @@ ipcMain.on('set-run-on-startup', (e, value) => setRunOnStartup(value));
 var bgwin = null;
 var remapwin = null;
 var tray = null;
-var disabled = preferences.get('mute_app') || !preferences.get('always_active');
+let muted = false;
+var disabled = muted || !preferences.get('always_active');
 let lastFocusedWindow = null;
 let focusedWindows = [];
 
@@ -179,6 +191,7 @@ function createMainWin() {
     });
     bgwin.removeMenu();
     bgwin.loadFile('editor.html');
+    bgwin.webContents.send('muted-changed', muted);
     bgwin.setAspectRatio(2);
     bgwin.setMinimumSize(720, 360);
     
@@ -246,13 +259,12 @@ function updateTrayMenu() {
         {
             label:'Disable Animalese Typing',
             type: 'checkbox',
-            accelerator: MUTE_HOTKEY,
-            checked: preferences.get('mute_app'),
+            accelerator: preferences.get('disable_hotkey'),
+            checked: muted,
             click: (menuItem) => { 
-                const value = menuItem.checked;
-                preferences.set('mute_app', value);
-                bgwin.webContents.send(`updated-mute_app`, value);
-                setDisable(value);
+                muted = menuItem.checked;
+                setDisable(muted);
+                if (bgwin) bgwin.webContents.send('muted-changed', muted);
             }
         },
         {
@@ -301,6 +313,16 @@ function createTrayIcon() {
     tray.displayBalloon({
         title: "Animalese Typing",
         content: "Animalese Typing is Running!"
+    });
+}
+
+function updateDisableHotkey(hotkey) {
+    globalShortcut.unregisterAll();
+    globalShortcut.register(hotkey, () => {// TODO: give warning to renderer when hotkey registration fails
+        muted = !muted;
+        setDisable(muted);
+        updateTrayMenu();
+        if (bgwin) bgwin.webContents.send('muted-changed', muted);
     });
 }
 
@@ -393,14 +415,7 @@ app.on('ready', () => {
         if (!disabled) startKeyListener();
     });
 
-    globalShortcut.register(MUTE_HOTKEY, () => {// TODO make hotkey configurable from apps remapper
-        const muteValue = !preferences.get('mute_app');
-        preferences.set('mute_app', muteValue);
-        bgwin.webContents.send(`updated-mute_app`, muteValue);
-        setDisable(muteValue);
-        updateTrayMenu();
-    });
-
+    updateDisableHotkey(preferences.get('disable_hotkey'));
     if (app.isPackaged) autoUpdater.checkForUpdatesAndNotify();
 });
 

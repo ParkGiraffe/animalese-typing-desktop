@@ -859,7 +859,7 @@ table thead {
 
 
 #remap-table tbody tr:nth-child(even) {
-    background: rgb(from var(--accent-color) r g b / 1.0);
+    background: rgb(from var(--secondary-bg-color) r g b / 1.0);
 }
 #remap-table tbody tr:nth-child(odd) {
     background: rgb(from var(--input-bg-color) r g b / 1.0);

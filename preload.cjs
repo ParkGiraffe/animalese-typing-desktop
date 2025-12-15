@@ -40,6 +40,7 @@ function getKeyInfo(e) {// parse keyInfo from keyup/down event
 contextBridge.exposeInMainWorld('api', {
     closeWindow: () => ipcRenderer.send('close-window'),
     minimizeWindow: () => ipcRenderer.send('minimize-window'),
+    showWindow: () => ipcRenderer.send('show-window'),
     getDefaultMapping: () => defaultKeyMap,
     sendRemapSound: (remapSound) => ipcRenderer.send('remap-send', remapSound),
     onRemapSound: (callback) => ipcRenderer.on('remap-sound', (_, remapSound) => callback(remapSound)),
@@ -57,6 +58,7 @@ contextBridge.exposeInMainWorld('api', {
         return () => ipcRenderer.removeListener(channel, handler);
     },
     onFocusedWindowChanged: (callback) => ipcRenderer.on('focused-window-changed', (_event, e) => callback(e)),
+    onMutedChanged: (callback) => ipcRenderer.on('muted-changed', (_, value) => callback(value)),
     getAppInfo: () => appInfo,
     goToUrl: (url) => shell.openExternal(url),
     onPermissionError: (callback) => {
@@ -77,8 +79,8 @@ contextBridge.exposeInMainWorld('settings', {
         settingsData[key] = value;
         return ipcRenderer.invoke('store-set', key, value)
     },
-    reset: () => {
-        ipcRenderer.invoke('store-reset')
+    reset: (key) => {
+        ipcRenderer.invoke('store-reset', key)
         settingsData = ipcRenderer.sendSync('get-store-data-sync');
     }
 });

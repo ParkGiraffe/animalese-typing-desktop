@@ -38,13 +38,30 @@ function updateTheme(theme) {
         themeStyle.setAttribute('href', `assets/styles/themes/${theme}.css`);
     }
 }
+
+window.api.onMutedChanged((muted) => {
+    const warning = document.getElementById('disabled_warning');
+    warning.setAttribute('translation', muted ? 'warning.disabled' : 'warning.enabled');
+    setTimeout(() => {
+        const hotkeySpan = document.getElementById('hotkey');
+        if (hotkeySpan) hotkeySpan.innerHTML = `${preferences.get('disable_hotkey')}`.toUpperCase();
+    }, 0);
+});
+
+window.api.onSettingUpdate('updated-disable_hotkey', () => {
+    const hotkeySpan = document.getElementById('hotkey');
+    if (hotkeySpan) hotkeySpan.innerHTML = `${preferences.get('disable_hotkey')}`.toUpperCase();
+});
 //#endregion
 
-function handleSpecialCommand(command) {
+function handleSpeicalCommand(command) {
     switch (command) {
-        case '#toggle_active':
-            // const value = preferences.get('mute_app');
-            // preferences.set('mute_app', !value);
+        case '#no_sound':// do nothing
+        break;
+        case '#disable_toggle': // handled in remapper
+        break;
+        case '#show_window':
+            window.api.showWindow();
         break;
     }
 }
@@ -62,7 +79,7 @@ window.api.onKeyDown( (keyInfo) => {
     if (!preferences.get('hold_repeat')) Object.assign(options, { hold: keycode });
     switch (true) {
         case ( isSpecial ):// handle special commands
-            handleSpecialCommand(finalSound);
+           handleSpeicalCommand(finalSound);
         return;
             
         case ( isVoice ): // uppercase typing has higher pitch and variation

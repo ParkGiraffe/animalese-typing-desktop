@@ -4,6 +4,9 @@
     
     "volume":"Volume",
 
+    "warning.disabled":"<span style='color: var(--input-highlight-color-3);'> press '<span id='hotkey'></span>' to enable </span>",
+    "warning.enabled":"<span style='color: var(--input-highlight-color);'></span>",
+
     "editor_title":"Editor",
     "voice.pitch":"pitch shift",
     "voice.intonation":"intonation",
